@@ -26,10 +26,4 @@
       <DocumentationFile>bin\x64\Release\Loci.Api.xml</DocumentationFile>
     </PropertyGroup>
 
-    <ItemGroup>
-      <Folder Include="Enums\" />
-      <Folder Include="Helpers\" />
-      <Folder Include="IPC\" />
-    </ItemGroup>
-
 </Project>
