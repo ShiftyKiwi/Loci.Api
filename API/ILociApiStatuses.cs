@@ -3,18 +3,23 @@ using LociApi.Enums;
 namespace LociApi.Api;
 
 /// <summary>
-///   Functions for interacting with a status.
+///   Functions for interacting with statuses.
 /// </summary>
 public interface ILociApiStatuses
 {
-    #region Data Reading
-
+    /// <summary>
+    /// Get an object representing a single custom status for the current active player.
+    /// </summary>
+    /// <param name="guid">The <see cref="Guid"/> identifier of the status to look up.</param>
+    /// <returns><see cref="LociApiEc" />:DataInvalid, DataNotFound, Success; along with the <see cref="LociStatusInfo"/> with the provided guid on
+    /// successful return.</returns>
     public (LociApiEc, LociStatusInfo) GetStatusInfo(Guid guid);
+
+    /// <summary>
+    /// Get a list containing all the current statuses for the current active player
+    /// </summary>
+    /// <returns>a list of <see cref="LociStatusInfo"/> items on success.</returns>
     public (LociApiEc, List<LociStatusInfo>) GetAllStatusInfo();
-
-    #endregion
-
-    #region Status Interactions
 
     public LociApiEc ApplyStatus(Guid guid);
     public LociApiEc ApplyLockedStatus(Guid guid, uint key);
@@ -38,15 +43,9 @@ public interface ILociApiStatuses
     public LociApiEc RemoveStatusByName(Guid guid, string name);
     public (LociApiEc, object) RemoveStatusesByName(List<Guid> guids, string name);
 
-    #endregion
-
-    #region Status Locking
-
     public LociApiEc LockStatus(Guid status, uint key);
     public LociApiEc LockStatuses(List<Guid> statuses, uint key);
     public LociApiEc UnlockStatus(Guid status, uint key);
     public LociApiEc UnlockStatuses(List<Guid> statuses, uint key);
     public LociApiEc ClearLocks(uint key);
-
-    #endregion
 }
