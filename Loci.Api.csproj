@@ -9,7 +9,8 @@
         <PackageVersion>0.0.1</PackageVersion>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <OutputPath>bin\$(Configuration)\</OutputPath>
-        <NoWarn>$(NoWarn);IDE1006,IDE0040,MSB3270</NoWarn>
+        <NoWarn>$(NoWarn);IDE1006,MSB3270</NoWarn>
+        <RootNamespace>LociApi</RootNamespace>
     </PropertyGroup>
 
     <!--Package Release Info-->
