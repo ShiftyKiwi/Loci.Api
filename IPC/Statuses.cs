@@ -411,7 +411,7 @@ public sealed class RemoveStatusesByName(IDalamudPluginInterface pi) : FuncSubsc
 }
 
 /// <inheritdoc cref="ILociApiStatuses.CanLock"/>
-public sealed class CanLock(IDalamudPluginInterface pi) : FuncSubscriber<Guid, int>(pi, Label)
+public sealed class CanLock(IDalamudPluginInterface pi) : FuncSubscriber<Guid, bool>(pi, Label)
 {
     /// <summary> The label. </summary>
     public const string Label = $"Loci.{nameof(CanLock)}";
@@ -420,12 +420,12 @@ public sealed class CanLock(IDalamudPluginInterface pi) : FuncSubscriber<Guid, i
     public static ReadOnlySpan<byte> LabelU8 => "Loci.CanLock"u8;
 
     /// <inheritdoc cref="ILociApiStatuses.CanLock"/>
-    public new LociApiEc Invoke(Guid statusId)
-        => (LociApiEc)base.Invoke(statusId);
+    public new bool Invoke(Guid statusId)
+        => base.Invoke(statusId);
 
     /// <summary> Create a provider. </summary>
-    public static FuncProvider<Guid, int> Provider(IDalamudPluginInterface pi, ILociApiStatuses api)
-        => new(pi, Label, (a) => (int)api.CanLock(a));
+    public static FuncProvider<Guid, bool> Provider(IDalamudPluginInterface pi, ILociApiStatuses api)
+        => new(pi, Label, api.CanLock);
 }
 
 /// <inheritdoc cref="ILociApiStatuses.LockStatus"/>

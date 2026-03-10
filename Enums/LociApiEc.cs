@@ -51,9 +51,19 @@ public enum LociApiEc
     InvalidKey = 8,
 
     /// <summary>
+    ///   Itsm was marked as persistent and cannot be removed.
+    /// </summary>
+    ItemIsPersistent = 9,
+
+    /// <summary>
     ///   Operation was performed on Client, when it is not allowed
     /// </summary>
-    ClientForbidden = 9,
+    ClientForbidden = 10,
+
+    /// <summary>
+    ///   Some data was parsed, but the file system path failed to be identified
+    /// </summary>
+    FSPathFaulted = 11,
 
     /// <summary>
     ///   Another error not yet documented occured.

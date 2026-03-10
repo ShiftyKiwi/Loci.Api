@@ -73,7 +73,7 @@ public interface ILociApiStatuses
     #region Locks
 
     // Return StatusLocked if already locked, and success if we can lock it.
-    public LociApiEc CanLock(Guid statusId);
+    public bool CanLock(Guid statusId);
 
     // Attempt to lock a single status in the Clients StatusManager by GUID.
     // Fails if already locked or ID is not present in Statuses.
