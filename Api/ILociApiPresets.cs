@@ -58,6 +58,14 @@ public interface ILociApiPresets
     public LociApiEc ApplyPresetByName(Guid presetId, string charaName, string buddyName);
     public LociApiEc ApplyPresetsByName(List<Guid> presetIds, string charaName, string buddyName, out List<Guid> failed);
 
+    public LociApiEc RemovePreset(Guid presetId, uint key);
+    public LociApiEc RemovePresets(List<Guid> presetIds, uint key, out List<Guid> failed);
+
+    public LociApiEc RemovePresetByPtr(Guid presetId, nint address);
+    public LociApiEc RemovePresetsByPtr(List<Guid> presetIds, nint address, out List<Guid> failed);
+
+    public LociApiEc RemovePresetByName(Guid presetId, string charaName, string buddyName);
+    public LociApiEc RemovePresetsByName(List<Guid> presetIds, string charaName, string buddyName, out List<Guid> failed);
 
     // Events can be added here overtime..
 }
