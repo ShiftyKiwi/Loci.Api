@@ -12,6 +12,16 @@ namespace LociApi;
 /// </returns>
 public delegate void ManagerStatusesChangedDelegate(nint address, Guid statusId, StatusChangeType changeType);
 
+/// <summary>
+///   Used when interacting with the ApplyToTarget button in Loci with a selected host choen.
+/// </summary>
+/// <returns>
+///   The recipient <paramref name="targetAddr"/>, 
+///   the <paramref name="targetHost"/> the application was intended for,
+///   and the LociStatusInfo tuple <paramref name="data"/> for application if valid. <para />
+/// </returns>
+public delegate void ApplyToTargetDelegate(nint targetAddr, string targetHost, List<LociStatusInfo> data);
+
 
 /// <summary>
 ///   Used when a status is edited in any way.
@@ -43,13 +53,3 @@ public delegate void PresetUpdatedDelegate(Guid presetId, bool wasDeleted);
 /// </summary>
 /// <returns> The <paramref name="eventId"/> that changed, and if it <paramref name="wasDeleted"/>. </returns>
 public delegate void EventUpdatedDelegate(Guid eventId, bool wasDeleted);
-
-/// <summary>
-///   Used when interacting with the ApplyToTarget button in Loci with a selected host choen.
-/// </summary>
-/// <returns>
-///   The recipient <paramref name="targetAddr"/>, 
-///   the <paramref name="targetHost"/> the application was intended for,
-///   and the LociStatusInfo tuple <paramref name="data"/> for application if valid. <para />
-/// </returns>
-public delegate void ApplyToTargetDelegate(nint targetAddr, string targetHost, List<LociStatusInfo> data);

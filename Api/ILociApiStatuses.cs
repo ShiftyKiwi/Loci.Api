@@ -90,6 +90,12 @@ public interface ILociApiStatuses
     public int UnlockAll(uint key);
 
     #endregion Locks
+
+    /// <summary>
+    ///   Triggers whenever a saved status is modified within the editor.
+    /// </summary>
+    public event StatusUpdatedDelegate? StatusUpdated;
+    
     /// <summary>
     ///   Occurs whenever a status has its ChainTrigger condition met. <para />
     ///   Provides the GUID of the status, the GUID to be chained, and what type of chain the GUID is.

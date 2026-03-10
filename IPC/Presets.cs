@@ -409,3 +409,21 @@ public sealed class RemovePresetsByName(IDalamudPluginInterface pi) : FuncSubscr
             return ((int)ec, failed);
         });
 }
+
+/// <inheritdoc cref="ILociApiPresets.PresetUpdated"/>
+public static class PresetUpdated
+{
+    /// <summary> The label. </summary>
+    public const string Label = $"Loci.{nameof(PresetUpdated)}";
+
+    /// <summary> The label as a UTF8 string. </summary>
+    public static ReadOnlySpan<byte> LabelU8 => "Loci.PresetUpdated"u8;
+
+    /// <summary> Create a new event subscriber. </summary>
+    public static EventSubscriber<Guid, bool> Subscriber(IDalamudPluginInterface pi, params Action<Guid, bool>[] actions)
+        => new(pi, Label, actions);
+    /// <summary> Create a provider. </summary>
+    public static EventProvider<Guid, bool> Provider(IDalamudPluginInterface pi, ILociApiPresets api)
+        => new(pi, Label, t => api.PresetUpdated += t.Invoke, t => api.PresetUpdated -= t.Invoke);
+}
+

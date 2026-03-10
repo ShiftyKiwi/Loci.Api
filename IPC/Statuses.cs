@@ -532,6 +532,23 @@ public sealed class UnlockAll(IDalamudPluginInterface pi) : FuncSubscriber<uint,
         => new(pi, Label, api.UnlockAll);
 }
 
+/// <inheritdoc cref="ILociApiStatuses.StatusUpdated"/>
+public static class StatusUpdated
+{
+    /// <summary> The label. </summary>
+    public const string Label = $"Loci.{nameof(StatusUpdated)}";
+
+    /// <summary> The label as a UTF8 string. </summary>
+    public static ReadOnlySpan<byte> LabelU8 => "Loci.StatusUpdated"u8;
+    
+    /// <summary> Create a new event subscriber. </summary>
+    public static EventSubscriber<Guid, bool> Subscriber(IDalamudPluginInterface pi, params Action<Guid, bool>[] actions)
+        => new(pi, Label, actions);
+    /// <summary> Create a provider. </summary>
+    public static EventProvider<Guid, bool> Provider(IDalamudPluginInterface pi, ILociApiStatuses api)
+        => new(pi, Label, t => api.StatusUpdated += t.Invoke, t => api.StatusUpdated -= t.Invoke);
+}
+
 /// <inheritdoc cref="ILociApiStatuses.ChainTriggerHit"/>
 public static class ChainTriggerHit
 {
