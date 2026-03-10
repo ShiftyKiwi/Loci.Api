@@ -1,6 +1,5 @@
 using Dalamud.Plugin;
 using LociApi.Api;
-using LociApi.Enums;
 using LociApi.Helpers;
 
 namespace LociApi.Ipc;
