@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace IPCGenerator;
 
 [Generator]
-public class SourceGenerator : IIncrementalGenerator
+internal class SourceGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
@@ -53,7 +53,8 @@ namespace IPCGenerator
 
         var sb = new StringBuilder();
 
-        sb.AppendLine("using Dalamud.Plugin;").AppendLine("using LociApi.Api;").AppendLine("using LociApi.Enums;").AppendLine("using LociApi.Helpers;").AppendLine();
+        sb.AppendLine("using Dalamud.Plugin;").AppendLine("using LociApi.Api;").AppendLine("using LociApi.Enums;").AppendLine("using LociApi.Helpers;")
+            .AppendLine().AppendLine("#nullable enable");
 
         if (ns is not null)
             sb.AppendLine($"namespace {ns}.GeneratedIPC;\n");

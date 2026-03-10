@@ -5,7 +5,6 @@ namespace LociApi.Api;
 /// <summary>
 ///   All related interactions with statuses.
 /// </summary>
-[LociApiGenerator]
 public interface ILociApiStatuses
 {
     #region Aquisition
@@ -100,7 +99,7 @@ public interface ILociApiStatuses
     ///   Triggers whenever a saved status is modified within the editor.
     /// </summary>
     public event StatusUpdatedDelegate? StatusUpdated;
-    
+
     /// <summary>
     ///   Occurs whenever a status has its ChainTrigger condition met. <para />
     ///   Provides the GUID of the status, the GUID to be chained, and what type of chain the GUID is.
