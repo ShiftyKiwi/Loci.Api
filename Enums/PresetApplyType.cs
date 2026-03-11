@@ -3,7 +3,7 @@ namespace LociApi.Enums;
 /// <summary>
 ///   Dictates how a preset should be applied to an ActorSM
 /// </summary>
-public enum PresetApplyType
+public enum PresetApplyType : byte
 {
     /// <summary>
     ///   Any existing statuses that are already active are ignored.
