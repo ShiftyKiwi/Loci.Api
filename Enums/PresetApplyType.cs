@@ -18,5 +18,5 @@ public enum PresetApplyType
     /// <summary>
     ///   All other statuses are removed prior to application. <b>Use with caution.</b>
     /// </summary>
-    ReplaceAll 2,
+    ReplaceAll = 2,
 }
