@@ -262,6 +262,24 @@ public sealed class ClearManagerByName(IDalamudPluginInterface pi) : FuncSubscri
         => new(pi, Label, (a, b) => (int)api.ClearManagerByName(a, b));
 }
 
+/// <inheritdoc cref="ILociApiStatusManager.ConvertLegacyData"/>
+public sealed class ConvertLegacyData(IDalamudPluginInterface pi) : FuncSubscriber<string, string>(pi, Label)
+{
+    /// <summary> The label. </summary>
+    public const string Label = $"Loci.{nameof(ConvertLegacyData)}";
+
+    /// <summary> The label as a UTF8 string. </summary>
+    public static ReadOnlySpan<byte> LabelU8 => "Loci.ConvertLegacyData"u8;
+
+    /// <inheritdoc cref="ILociApiStatusManager.ConvertLegacyData"/>
+    public new string Invoke(string legacyData)
+        => base.Invoke(legacyData);
+
+    /// <summary> Create a provider. </summary>
+    public static FuncProvider<string, string> Provider(IDalamudPluginInterface pi, ILociApiStatusManager api)
+        => new(pi, Label, api.ConvertLegacyData);
+}
+
 /// <inheritdoc cref="ILociApiStatusManager.ManagerChanged"/>
 public static class ManagerChanged
 {

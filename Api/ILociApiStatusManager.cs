@@ -33,6 +33,15 @@ public interface ILociApiStatusManager
     public LociApiEc ClearManagerByName(string charaName, string buddyName);
 
     /// <summary>
+    ///   Converts the legacy StatusManager format in base64 to Loci's data format. <para />
+    ///   This is intended to help provide conversion compatibility for those using Loci to 
+    ///   see sent legacy data, even if it cannot be recipocated.
+    /// </summary>
+    /// <param name="base64Data"> The legacy data formatted base64. </param>
+    /// <returns> The converted LociManagerBase64 </returns>
+    public string ConvertLegacyData(string base64Data);
+
+    /// <summary>
     ///   Triggers when an actors StatusManager updates in any way.
     /// </summary>
     public event Action<nint> ManagerChanged;
