@@ -1,5 +1,4 @@
 using LociApi.Enums;
-using Newtonsoft.Json.Linq;
 
 namespace LociApi.Api;
 
@@ -41,7 +40,7 @@ public interface ILociApiEvents
     // Creates a LociEvent with the given name and type.
     // Returns the GUID of the created event, if successful.
     // eventData, the compressed form of an event can be provided, but if not required.
-    public (LociApiEc, Guid) CreateEvent(string eventName, string eventData, LociEventType eventType);
+    public Guid CreateEvent(string eventName, string eventData, LociEventType eventType);
 
     // Deletes an event given the provided eventId.
     // Returns Success, DataNotFound, DataInvalid.
@@ -52,16 +51,9 @@ public interface ILociApiEvents
     public LociApiEc SetEventStates(List<Guid> eventIds, bool newState, out List<Guid> failed);
 
 
-    // Fetch the data about an event if the info tuple does not provide enough details. (Maybe remove)
-    public string? GetEventBase64(Guid eventId);
-    public JObject? GetEventJObject(Guid eventId);
-
-
-    public event Action<Guid>? EventAdded;
-
-    public event Action<Guid>? EventDeleted;
+    public event EventUpdatedDelegate? EventUpdated;
 
     // Fires whenever an event moved locations in the CKFS. Provides the new path.
     // (Can revise to handle in bulk or change to be a generic action without params to act as a notifier
-    public event Action<Guid, string>? EventPathMoved;
+    public event Action<Guid, string, string>? EventPathMoved;
 }

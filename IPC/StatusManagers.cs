@@ -65,6 +65,14 @@ public sealed class GetManagerByName(IDalamudPluginInterface pi) : FuncSubscribe
     public static ReadOnlySpan<byte> LabelU8 => "Loci.GetManagerByName"u8;
 
     /// <inheritdoc cref="ILociApiStatusManager.GetManagerByName"/>
+    public (LociApiEc, string?) Invoke(string charaNameWorld)
+    {
+        var (ec, s) = base.Invoke(charaNameWorld, string.Empty);
+        return ((LociApiEc)ec, s);
+    }
+
+
+    /// <inheritdoc cref="ILociApiStatusManager.GetManagerByName"/>
     public new (LociApiEc, string?) Invoke(string charaName, string buddyName)
     {
         var (ec, s) = base.Invoke(charaName, buddyName);
@@ -184,7 +192,7 @@ public sealed class SetManagerByName(IDalamudPluginInterface pi) : FuncSubscribe
     public static ReadOnlySpan<byte> LabelU8 => "Loci.SetManagerByName"u8;
 
     /// <inheritdoc cref="ILociApiStatusManager.SetManagerByName"/>
-    public new LociApiEc Invoke(string charaNameWorld, string base64Data)
+    public LociApiEc Invoke(string charaNameWorld, string base64Data)
         => (LociApiEc)base.Invoke(charaNameWorld, string.Empty, base64Data);
 
     /// <inheritdoc cref="ILociApiStatusManager.SetManagerByName"/>
@@ -240,6 +248,10 @@ public sealed class ClearManagerByName(IDalamudPluginInterface pi) : FuncSubscri
 
     /// <summary> The label as a UTF8 string. </summary>
     public static ReadOnlySpan<byte> LabelU8 => "Loci.ClearManagerByName"u8;
+
+    /// <inheritdoc cref="ILociApiStatusManager.ClearManagerByName"/>
+    public LociApiEc Invoke(string charaNameWorld)
+        => (LociApiEc)base.Invoke(charaNameWorld, string.Empty);
 
     /// <inheritdoc cref="ILociApiStatusManager.ClearManagerByName"/>
     public new LociApiEc Invoke(string charaName, string buddyName)

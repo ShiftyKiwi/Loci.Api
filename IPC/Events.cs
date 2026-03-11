@@ -2,7 +2,6 @@ using Dalamud.Plugin;
 using LociApi.Api;
 using LociApi.Enums;
 using LociApi.Helpers;
-using Newtonsoft.Json.Linq;
 
 namespace LociApi.Ipc;
 
@@ -111,7 +110,7 @@ public sealed class GetEventSummaryList(IDalamudPluginInterface pi) : FuncSubscr
 }
 
 /// <inheritdoc cref="ILociApiEvents.CreateEvent"/>
-public sealed class CreateEvent(IDalamudPluginInterface pi) : FuncSubscriber<string, string, LociEventType, (int, Guid)>(pi, Label)
+public sealed class CreateEvent(IDalamudPluginInterface pi) : FuncSubscriber<string, string, LociEventType, Guid>(pi, Label)
 {
     /// <summary> The label. </summary>
     public const string Label = $"Loci.{nameof(CreateEvent)}";
@@ -120,19 +119,12 @@ public sealed class CreateEvent(IDalamudPluginInterface pi) : FuncSubscriber<str
     public static ReadOnlySpan<byte> LabelU8 => "Loci.CreateEvent"u8;
 
     /// <inheritdoc cref="ILociApiEvents.CreateEvent"/>
-    public new (LociApiEc, Guid) Invoke(string eventName, string eventData, LociEventType eventType)
-    {
-        var (ec, id) = base.Invoke(eventName, eventData, eventType);
-        return ((LociApiEc)ec, id);
-    }
+    public new Guid Invoke(string eventName, string eventData, LociEventType eventType)
+        => base.Invoke(eventName, eventData, eventType);
 
     /// <summary> Create a provider. </summary>
-    public static FuncProvider<string, string, LociEventType, (int, Guid)> Provider(IDalamudPluginInterface pi, ILociApiEvents api)
-        => new(pi, Label, (a, b, c) =>
-        {
-            var (ec, id) = api.CreateEvent(a, b, c);
-            return ((int)ec, id);
-        });
+    public static FuncProvider<string, string, LociEventType, Guid> Provider(IDalamudPluginInterface pi, ILociApiEvents api)
+        => new(pi, Label, api.CreateEvent);
 }
 
 /// <inheritdoc cref="ILociApiEvents.DeleteEvent"/>
@@ -197,76 +189,21 @@ public sealed class SetEventStates(IDalamudPluginInterface pi) : FuncSubscriber<
         });
 }
 
-/// <inheritdoc cref="ILociApiEvents.GetEventBase64"/>
-public sealed class GetEventBase64(IDalamudPluginInterface pi) : FuncSubscriber<Guid, string?>(pi, Label)
+/// <inheritdoc cref="ILociApiEvents.EventUpdated"/>
+public static class EventUpdated
 {
     /// <summary> The label. </summary>
-    public const string Label = $"Loci.{nameof(GetEventBase64)}";
+    public const string Label = $"Loci.{nameof(EventUpdated)}";
 
     /// <summary> The label as a UTF8 string. </summary>
-    public static ReadOnlySpan<byte> LabelU8 => "Loci.GetEventBase64"u8;
-
-    /// <inheritdoc cref="ILociApiEvents.GetEventBase64"/>
-    public new string? Invoke(Guid eventId)
-        => base.Invoke(eventId);
-
-    /// <summary> Create a provider. </summary>
-    public static FuncProvider<Guid, string?> Provider(IDalamudPluginInterface pi, ILociApiEvents api)
-        => new(pi, Label, api.GetEventBase64);
-}
-
-/// <inheritdoc cref="ILociApiEvents.GetEventJObject"/>
-public sealed class GetEventJObject(IDalamudPluginInterface pi) : FuncSubscriber<Guid, JObject?>(pi, Label)
-{
-    /// <summary> The label. </summary>
-    public const string Label = $"Loci.{nameof(GetEventJObject)}";
-
-    /// <summary> The label as a UTF8 string. </summary>
-    public static ReadOnlySpan<byte> LabelU8 => "Loci.GetEventJObject"u8;
-
-    /// <inheritdoc cref="ILociApiEvents.GetEventJObject"/>
-    public new JObject? Invoke(Guid eventId)
-        => base.Invoke(eventId);
-
-    /// <summary> Create a provider. </summary>
-    public static FuncProvider<Guid, JObject?> Provider(IDalamudPluginInterface pi, ILociApiEvents api)
-        => new(pi, Label, api.GetEventJObject);
-}
-
-/// <inheritdoc cref="ILociApiEvents.EventAdded"/>
-public static class EventAdded
-{
-    /// <summary> The label. </summary>
-    public const string Label = $"Loci.{nameof(EventAdded)}";
-
-    /// <summary> The label as a UTF8 string. </summary>
-    public static ReadOnlySpan<byte> LabelU8 => "Loci.EventAdded"u8;
+    public static ReadOnlySpan<byte> LabelU8 => "Loci.EventUpdated"u8;
 
     /// <summary> Create a new event subscriber. </summary>
-    public static EventSubscriber<Guid> Subscriber(IDalamudPluginInterface pi, params Action<Guid>[] actions)
+    public static EventSubscriber<Guid, bool> Subscriber(IDalamudPluginInterface pi, params Action<Guid, bool>[] actions)
         => new(pi, Label, actions);
-
     /// <summary> Create a provider. </summary>
-    public static EventProvider<Guid> Provider(IDalamudPluginInterface pi, ILociApiEvents api)
-        => new(pi, Label, (t => api.EventAdded += t, t => api.EventAdded -= t));
-}
-
-/// <inheritdoc cref="ILociApiEvents.EventDeleted"/>
-public static class EventDeleted
-{
-    /// <summary> The label. </summary>
-    public const string Label = $"Loci.{nameof(EventDeleted)}";
-
-    /// <summary> The label as a UTF8 string. </summary>
-    public static ReadOnlySpan<byte> LabelU8 => "Loci.EventDeleted"u8;
-
-    /// <summary> Create a new event subscriber. </summary>
-    public static EventSubscriber<Guid> Subscriber(IDalamudPluginInterface pi, params Action<Guid>[] actions)
-        => new(pi, Label, actions);
-
-    /// <summary> Create a provider. </summary>
-    public static EventProvider<Guid> Provider(IDalamudPluginInterface pi, ILociApiEvents api)
-        => new(pi, Label, (t => api.EventDeleted += t, t => api.EventDeleted -= t));
+    public static EventProvider<Guid, bool> Provider(IDalamudPluginInterface pi, ILociApiEvents api)
+        => new(pi, Label, t => api.EventUpdated += t.Invoke, t => api.EventUpdated -= t.Invoke);
 }
 
 /// <inheritdoc cref="ILociApiEvents.EventPathMoved"/>
@@ -279,10 +216,10 @@ public static class EventPathMoved
     public static ReadOnlySpan<byte> LabelU8 => "Loci.EventPathMoved"u8;
 
     /// <summary> Create a new event subscriber. </summary>
-    public static EventSubscriber<Guid, string> Subscriber(IDalamudPluginInterface pi, params Action<Guid, string>[] actions)
+    public static EventSubscriber<Guid, string, string> Subscriber(IDalamudPluginInterface pi, params Action<Guid, string, string>[] actions)
         => new(pi, Label, actions);
 
     /// <summary> Create a provider. </summary>
-    public static EventProvider<Guid, string> Provider(IDalamudPluginInterface pi, ILociApiEvents api)
-        => new(pi, Label, (t => api.EventPathMoved += t, t => api.EventPathMoved -= t));
+    public static EventProvider<Guid, string, string> Provider(IDalamudPluginInterface pi, ILociApiEvents api)
+        => new(pi, Label, t => api.EventPathMoved += t.Invoke, t => api.EventPathMoved -= t.Invoke);
 }

@@ -3,7 +3,7 @@ namespace LociApi.Enums;
 /// <summary>
 ///   Return codes for API functions.
 /// </summary>
-public enum LociApiEc
+public enum LociApiEc : int
 {
     /// <summary>
     ///   Interaction worked as intended.
