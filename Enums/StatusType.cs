@@ -1,22 +1,14 @@
 namespace LociApi.Enums;
 
-/// <summary>
-///   The catagory of a StatusIcon
-/// </summary>
+/// <summary> The category of a StatusIcon </summary>
 public enum StatusType : byte
 {
-    /// <summary>
-    ///   Status Info (Enhancements)
-    /// </summary>
+    /// <summary> Status Info (Enhancements) </summary>
     Positive = 0,
 
-    /// <summary>
-    ///   Status Info (Enfeeblements)
-    /// </summary>
+    /// <summary> Status Info (Enfeeblements) </summary>
     Negative = 1,
 
-    /// <summary>
-    ///   Status Info (Other)
-    /// </summary>
-    Special = 2,
+    /// <summary> Status Info (Other) </summary>
+    Special = 2
 }

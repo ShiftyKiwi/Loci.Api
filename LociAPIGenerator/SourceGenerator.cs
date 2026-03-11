@@ -1,4 +1,4 @@
-using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Microsoft.CodeAnalysis;
@@ -12,15 +12,15 @@ internal class SourceGenerator : IIncrementalGenerator
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         var sp = context.SyntaxProvider.CreateSyntaxProvider(
-            predicate: (node, _) => node is TypeDeclarationSyntax { AttributeLists.Count: > 0 },
-            transform: (ctx, _) =>
+            (node, _) => node is TypeDeclarationSyntax { AttributeLists.Count: > 0 },
+            (ctx, _) =>
             {
                 var node = (TypeDeclarationSyntax)ctx.Node;
                 var symbol = (INamedTypeSymbol?)ctx.SemanticModel.GetDeclaredSymbol(node);
                 if (symbol is null || symbol.TypeKind != TypeKind.Interface)
                     return null;
 
-                System.Diagnostics.Trace.WriteLine($"saw symbol: {symbol.ToDisplayString()}");
+                Trace.WriteLine($"saw symbol: {symbol.ToDisplayString()}");
 
                 var hasAttribute = symbol.GetAttributes().Any(s => s.AttributeClass?.Name == "LociApiGeneratorAttribute");
                 return hasAttribute ? symbol : null;

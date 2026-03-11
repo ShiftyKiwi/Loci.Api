@@ -1,27 +1,30 @@
 using Dalamud.Plugin;
 using Dalamud.Plugin.Ipc;
 using Dalamud.Plugin.Services;
+
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 namespace LociApi.Helpers;
 
-/// <summary>
-///   Specialized disposable Subscriber for Events.<para />
-///   Subscriptions are wrapped to be individually exception-safe.<para/>
-///   Can be enabled and disabled.<para/>
+/// <summary> Specialized disposable Subscriber for Events.
+///     <para />
+///     Subscriptions are wrapped to be individually exception-safe.
+///     <para />
+///     Can be enabled and disabled.
+///     <para />
 /// </summary>
 public sealed class EventSubscriber : IDisposable
 {
-    private readonly string                        _label;
-    private readonly IPluginLog                    _log;
-    private readonly Dictionary<Action, Action>    _delegates = new();
-    private          ICallGateSubscriber<object?>? _subscriber;
-    private          bool                          _disabled;
+    private readonly Dictionary<Action, Action> _delegates = new();
+    private readonly string _label;
+    private readonly IPluginLog _log;
+    private bool _disabled;
+    private ICallGateSubscriber<object?>? _subscriber;
 
     public EventSubscriber(IDalamudPluginInterface pi, string label, params Action[] actions)
     {
         _label = label;
-        _log   = PluginLogHelper.GetLog(pi);
+        _log = PluginLogHelper.GetLog(pi);
         try
         {
             _subscriber = pi.GetIpcSubscriber<object?>(label);
@@ -37,10 +40,14 @@ public sealed class EventSubscriber : IDisposable
         }
     }
 
-    /// <summary>
-    ///   Enable all currently subscribed actions registered with this EventSubscriber.
-    ///   Does nothing if it is already enabled.
-    /// </summary>
+    public void Dispose()
+    {
+        Disable();
+        _subscriber = null;
+        _delegates.Clear();
+    }
+
+    /// <summary> Enable all currently subscribed actions registered with this EventSubscriber. Does nothing if it is already enabled. </summary>
     public void Enable()
     {
         if (_disabled && _subscriber != null)
@@ -53,9 +60,8 @@ public sealed class EventSubscriber : IDisposable
     }
 
     /// <summary>
-    ///   Disable all subscribed actions registered with this EventSubscriber.
-    ///   Does nothing if it is already disabled.
-    ///   Does not forget the actions, only disables them.
+    ///     Disable all subscribed actions registered with this EventSubscriber. Does nothing if it is already disabled. Does not forget the actions, only
+    ///     disables them.
     /// </summary>
     public void Disable()
     {
@@ -69,9 +75,7 @@ public sealed class EventSubscriber : IDisposable
         }
     }
 
-    /// <summary>
-    ///   Add or remove an action to the IPC event, if it is valid.
-    /// </summary>
+    /// <summary> Add or remove an action to the IPC event, if it is valid. </summary>
     public event Action Event
     {
         add
@@ -101,30 +105,27 @@ public sealed class EventSubscriber : IDisposable
         }
     }
 
-    public void Dispose()
-    {
-        Disable();
-        _subscriber = null;
-        _delegates.Clear();
-    }
-
     ~EventSubscriber()
-        => Dispose();
+    {
+        Dispose();
+    }
 }
 
-/// <summary><inheritdoc cref="EventSubscriber"/> </summary>
+/// <summary>
+///     <inheritdoc cref="EventSubscriber" />
+/// </summary>
 public sealed class EventSubscriber<T1> : IDisposable
 {
-    private readonly string                             _label;
-    private readonly IPluginLog                         _log;
     private readonly Dictionary<Action<T1>, Action<T1>> _delegates = new();
-    private          ICallGateSubscriber<T1, object?>?  _subscriber;
-    private          bool                               _disabled;
+    private readonly string _label;
+    private readonly IPluginLog _log;
+    private bool _disabled;
+    private ICallGateSubscriber<T1, object?>? _subscriber;
 
     public EventSubscriber(IDalamudPluginInterface pi, string label, params Action<T1>[] actions)
     {
         _label = label;
-        _log   = PluginLogHelper.GetLog(pi);
+        _log = PluginLogHelper.GetLog(pi);
         try
         {
             _subscriber = pi.GetIpcSubscriber<T1, object?>(label);
@@ -140,7 +141,16 @@ public sealed class EventSubscriber<T1> : IDisposable
         }
     }
 
-    /// <summary><inheritdoc cref="EventSubscriber.Enable"/> </summary>
+    public void Dispose()
+    {
+        Disable();
+        _subscriber = null;
+        _delegates.Clear();
+    }
+
+    /// <summary>
+    ///     <inheritdoc cref="EventSubscriber.Enable" />
+    /// </summary>
     public void Enable()
     {
         if (_disabled && _subscriber != null)
@@ -152,7 +162,9 @@ public sealed class EventSubscriber<T1> : IDisposable
         }
     }
 
-    /// <summary><inheritdoc cref="EventSubscriber.Disable"/> </summary>
+    /// <summary>
+    ///     <inheritdoc cref="EventSubscriber.Disable" />
+    /// </summary>
     public void Disable()
     {
         if (!_disabled)
@@ -165,7 +177,9 @@ public sealed class EventSubscriber<T1> : IDisposable
         }
     }
 
-    /// <summary><inheritdoc cref="EventSubscriber.Event"/> </summary>
+    /// <summary>
+    ///     <inheritdoc cref="EventSubscriber.Event" />
+    /// </summary>
     public event Action<T1> Event
     {
         add
@@ -195,25 +209,22 @@ public sealed class EventSubscriber<T1> : IDisposable
         }
     }
 
-    public void Dispose()
-    {
-        Disable();
-        _subscriber = null;
-        _delegates.Clear();
-    }
-
     ~EventSubscriber()
-        => Dispose();
+    {
+        Dispose();
+    }
 }
 
-/// <summary><inheritdoc cref="EventSubscriber"/> </summary>
+/// <summary>
+///     <inheritdoc cref="EventSubscriber" />
+/// </summary>
 public sealed class EventSubscriber<T1, T2> : IDisposable
 {
-    private readonly string                                     _label;
-    private readonly IPluginLog                                 _log;
     private readonly Dictionary<Action<T1, T2>, Action<T1, T2>> _delegates = new();
-    private          ICallGateSubscriber<T1, T2, object?>?      _subscriber;
-    private          bool                                       _disabled;
+    private readonly string _label;
+    private readonly IPluginLog _log;
+    private bool _disabled;
+    private ICallGateSubscriber<T1, T2, object?>? _subscriber;
 
     public EventSubscriber(IDalamudPluginInterface pi, string label, params Action<T1, T2>[] actions)
     {
@@ -234,7 +245,16 @@ public sealed class EventSubscriber<T1, T2> : IDisposable
         }
     }
 
-    /// <summary><inheritdoc cref="EventSubscriber.Enable"/> </summary>
+    public void Dispose()
+    {
+        Disable();
+        _subscriber = null;
+        _delegates.Clear();
+    }
+
+    /// <summary>
+    ///     <inheritdoc cref="EventSubscriber.Enable" />
+    /// </summary>
     public void Enable()
     {
         if (_disabled && _subscriber != null)
@@ -246,7 +266,9 @@ public sealed class EventSubscriber<T1, T2> : IDisposable
         }
     }
 
-    /// <summary><inheritdoc cref="EventSubscriber.Disable"/> </summary>
+    /// <summary>
+    ///     <inheritdoc cref="EventSubscriber.Disable" />
+    /// </summary>
     public void Disable()
     {
         if (!_disabled)
@@ -259,7 +281,9 @@ public sealed class EventSubscriber<T1, T2> : IDisposable
         }
     }
 
-    /// <summary><inheritdoc cref="EventSubscriber.Event"/> </summary>
+    /// <summary>
+    ///     <inheritdoc cref="EventSubscriber.Event" />
+    /// </summary>
     public event Action<T1, T2> Event
     {
         add
@@ -289,30 +313,27 @@ public sealed class EventSubscriber<T1, T2> : IDisposable
         }
     }
 
-    public void Dispose()
-    {
-        Disable();
-        _subscriber = null;
-        _delegates.Clear();
-    }
-
     ~EventSubscriber()
-        => Dispose();
+    {
+        Dispose();
+    }
 }
 
-/// <summary><inheritdoc cref="EventSubscriber"/> </summary>
+/// <summary>
+///     <inheritdoc cref="EventSubscriber" />
+/// </summary>
 public sealed class EventSubscriber<T1, T2, T3> : IDisposable
 {
-    private readonly string                                             _label;
-    private readonly IPluginLog                                         _log;
     private readonly Dictionary<Action<T1, T2, T3>, Action<T1, T2, T3>> _delegates = new();
-    private          ICallGateSubscriber<T1, T2, T3, object?>?          _subscriber;
-    private          bool                                               _disabled;
+    private readonly string _label;
+    private readonly IPluginLog _log;
+    private bool _disabled;
+    private ICallGateSubscriber<T1, T2, T3, object?>? _subscriber;
 
     public EventSubscriber(IDalamudPluginInterface pi, string label, params Action<T1, T2, T3>[] actions)
     {
         _label = label;
-        _log   = PluginLogHelper.GetLog(pi);
+        _log = PluginLogHelper.GetLog(pi);
         try
         {
             _subscriber = pi.GetIpcSubscriber<T1, T2, T3, object?>(label);
@@ -328,7 +349,16 @@ public sealed class EventSubscriber<T1, T2, T3> : IDisposable
         }
     }
 
-    /// <summary><inheritdoc cref="EventSubscriber.Enable"/> </summary>
+    public void Dispose()
+    {
+        Disable();
+        _subscriber = null;
+        _delegates.Clear();
+    }
+
+    /// <summary>
+    ///     <inheritdoc cref="EventSubscriber.Enable" />
+    /// </summary>
     public void Enable()
     {
         if (_disabled && _subscriber != null)
@@ -340,7 +370,9 @@ public sealed class EventSubscriber<T1, T2, T3> : IDisposable
         }
     }
 
-    /// <summary><inheritdoc cref="EventSubscriber.Disable"/> </summary>
+    /// <summary>
+    ///     <inheritdoc cref="EventSubscriber.Disable" />
+    /// </summary>
     public void Disable()
     {
         if (!_disabled)
@@ -353,7 +385,9 @@ public sealed class EventSubscriber<T1, T2, T3> : IDisposable
         }
     }
 
-    /// <summary><inheritdoc cref="EventSubscriber.Event"/> </summary>
+    /// <summary>
+    ///     <inheritdoc cref="EventSubscriber.Event" />
+    /// </summary>
     public event Action<T1, T2, T3> Event
     {
         add
@@ -383,30 +417,27 @@ public sealed class EventSubscriber<T1, T2, T3> : IDisposable
         }
     }
 
-    public void Dispose()
-    {
-        Disable();
-        _subscriber = null;
-        _delegates.Clear();
-    }
-
     ~EventSubscriber()
-        => Dispose();
+    {
+        Dispose();
+    }
 }
 
-/// <summary><inheritdoc cref="EventSubscriber"/> </summary>
+/// <summary>
+///     <inheritdoc cref="EventSubscriber" />
+/// </summary>
 public sealed class EventSubscriber<T1, T2, T3, T4> : IDisposable
 {
-    private readonly string                                                     _label;
-    private readonly IPluginLog                                                 _log;
     private readonly Dictionary<Action<T1, T2, T3, T4>, Action<T1, T2, T3, T4>> _delegates = new();
-    private          ICallGateSubscriber<T1, T2, T3, T4, object?>?              _subscriber;
-    private          bool                                                       _disabled;
+    private readonly string _label;
+    private readonly IPluginLog _log;
+    private bool _disabled;
+    private ICallGateSubscriber<T1, T2, T3, T4, object?>? _subscriber;
 
     public EventSubscriber(IDalamudPluginInterface pi, string label, params Action<T1, T2, T3, T4>[] actions)
     {
         _label = label;
-        _log   = PluginLogHelper.GetLog(pi);
+        _log = PluginLogHelper.GetLog(pi);
         try
         {
             _subscriber = pi.GetIpcSubscriber<T1, T2, T3, T4, object?>(label);
@@ -422,7 +453,16 @@ public sealed class EventSubscriber<T1, T2, T3, T4> : IDisposable
         }
     }
 
-    /// <summary><inheritdoc cref="EventSubscriber.Enable"/> </summary>
+    public void Dispose()
+    {
+        Disable();
+        _subscriber = null;
+        _delegates.Clear();
+    }
+
+    /// <summary>
+    ///     <inheritdoc cref="EventSubscriber.Enable" />
+    /// </summary>
     public void Enable()
     {
         if (_disabled && _subscriber != null)
@@ -434,7 +474,9 @@ public sealed class EventSubscriber<T1, T2, T3, T4> : IDisposable
         }
     }
 
-    /// <summary><inheritdoc cref="EventSubscriber.Disable"/> </summary>
+    /// <summary>
+    ///     <inheritdoc cref="EventSubscriber.Disable" />
+    /// </summary>
     public void Disable()
     {
         if (!_disabled)
@@ -447,7 +489,9 @@ public sealed class EventSubscriber<T1, T2, T3, T4> : IDisposable
         }
     }
 
-    /// <summary><inheritdoc cref="EventSubscriber.Event"/> </summary>
+    /// <summary>
+    ///     <inheritdoc cref="EventSubscriber.Event" />
+    /// </summary>
     public event Action<T1, T2, T3, T4> Event
     {
         add
@@ -477,30 +521,27 @@ public sealed class EventSubscriber<T1, T2, T3, T4> : IDisposable
         }
     }
 
-    public void Dispose()
-    {
-        Disable();
-        _subscriber = null;
-        _delegates.Clear();
-    }
-
     ~EventSubscriber()
-        => Dispose();
+    {
+        Dispose();
+    }
 }
 
-/// <summary><inheritdoc cref="EventSubscriber"/> </summary>
+/// <summary>
+///     <inheritdoc cref="EventSubscriber" />
+/// </summary>
 public sealed class EventSubscriber<T1, T2, T3, T4, T5> : IDisposable
 {
-    private readonly string                                                             _label;
-    private readonly IPluginLog                                                         _log;
     private readonly Dictionary<Action<T1, T2, T3, T4, T5>, Action<T1, T2, T3, T4, T5>> _delegates = new();
-    private          ICallGateSubscriber<T1, T2, T3, T4, T5, object?>?                  _subscriber;
-    private          bool                                                               _disabled;
+    private readonly string _label;
+    private readonly IPluginLog _log;
+    private bool _disabled;
+    private ICallGateSubscriber<T1, T2, T3, T4, T5, object?>? _subscriber;
 
     public EventSubscriber(IDalamudPluginInterface pi, string label, params Action<T1, T2, T3, T4, T5>[] actions)
     {
         _label = label;
-        _log   = PluginLogHelper.GetLog(pi);
+        _log = PluginLogHelper.GetLog(pi);
         try
         {
             _subscriber = pi.GetIpcSubscriber<T1, T2, T3, T4, T5, object?>(label);
@@ -516,7 +557,16 @@ public sealed class EventSubscriber<T1, T2, T3, T4, T5> : IDisposable
         }
     }
 
-    /// <summary><inheritdoc cref="EventSubscriber.Enable"/> </summary>
+    public void Dispose()
+    {
+        Disable();
+        _subscriber = null;
+        _delegates.Clear();
+    }
+
+    /// <summary>
+    ///     <inheritdoc cref="EventSubscriber.Enable" />
+    /// </summary>
     public void Enable()
     {
         if (_disabled && _subscriber != null)
@@ -528,7 +578,9 @@ public sealed class EventSubscriber<T1, T2, T3, T4, T5> : IDisposable
         }
     }
 
-    /// <summary><inheritdoc cref="EventSubscriber.Disable"/> </summary>
+    /// <summary>
+    ///     <inheritdoc cref="EventSubscriber.Disable" />
+    /// </summary>
     public void Disable()
     {
         if (!_disabled)
@@ -541,7 +593,9 @@ public sealed class EventSubscriber<T1, T2, T3, T4, T5> : IDisposable
         }
     }
 
-    /// <summary><inheritdoc cref="EventSubscriber.Event"/> </summary>
+    /// <summary>
+    ///     <inheritdoc cref="EventSubscriber.Event" />
+    /// </summary>
     public event Action<T1, T2, T3, T4, T5> Event
     {
         add
@@ -571,13 +625,8 @@ public sealed class EventSubscriber<T1, T2, T3, T4, T5> : IDisposable
         }
     }
 
-    public void Dispose()
-    {
-        Disable();
-        _subscriber = null;
-        _delegates.Clear();
-    }
-
     ~EventSubscriber()
-        => Dispose();
+    {
+        Dispose();
+    }
 }

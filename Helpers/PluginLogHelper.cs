@@ -6,13 +6,17 @@ namespace LociApi.Helpers;
 
 internal class PluginLogHelper
 {
-    [PluginService] private static IPluginLog? _log { get; set; } = null;
-
     private PluginLogHelper(IDalamudPluginInterface pi)
-        => pi.Inject(this);
+    {
+        pi.Inject(this);
+    }
+
+    [PluginService] private static IPluginLog? _log { get; } = null;
 
     public static void WriteError(IDalamudPluginInterface pi, string errorMessage)
-        => GetLog(pi).Error(errorMessage);
+    {
+        GetLog(pi).Error(errorMessage);
+    }
 
     public static IPluginLog GetLog(IDalamudPluginInterface pi)
     {

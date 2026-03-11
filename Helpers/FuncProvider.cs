@@ -1,12 +1,11 @@
 using Dalamud.Plugin;
 using Dalamud.Plugin.Ipc;
+
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 namespace LociApi.Helpers;
 
-/// <summary>
-///   Specialized disposable Provider for Funcs.
-/// </summary>
+/// <summary> Specialized disposable Provider for Funcs. </summary>
 public sealed class FuncProvider<TRet> : IDisposable
 {
     private ICallGateProvider<TRet>? _provider;
@@ -34,10 +33,12 @@ public sealed class FuncProvider<TRet> : IDisposable
     }
 
     ~FuncProvider()
-        => Dispose();
+    {
+        Dispose();
+    }
 }
 
-/// <inheritdoc cref="FuncProvider{TRet}"/>
+/// <inheritdoc cref="FuncProvider{TRet}" />
 public sealed class FuncProvider<T1, TRet> : IDisposable
 {
     private ICallGateProvider<T1, TRet>? _provider;
@@ -65,10 +66,12 @@ public sealed class FuncProvider<T1, TRet> : IDisposable
     }
 
     ~FuncProvider()
-        => Dispose();
+    {
+        Dispose();
+    }
 }
 
-/// <inheritdoc cref="FuncProvider{TRet}"/>
+/// <inheritdoc cref="FuncProvider{TRet}" />
 public sealed class FuncProvider<T1, T2, TRet> : IDisposable
 {
     private ICallGateProvider<T1, T2, TRet>? _provider;
@@ -96,10 +99,12 @@ public sealed class FuncProvider<T1, T2, TRet> : IDisposable
     }
 
     ~FuncProvider()
-        => Dispose();
+    {
+        Dispose();
+    }
 }
 
-/// <inheritdoc cref="FuncProvider{TRet}"/>
+/// <inheritdoc cref="FuncProvider{TRet}" />
 public sealed class FuncProvider<T1, T2, T3, TRet> : IDisposable
 {
     private ICallGateProvider<T1, T2, T3, TRet>? _provider;
@@ -127,5 +132,7 @@ public sealed class FuncProvider<T1, T2, T3, TRet> : IDisposable
     }
 
     ~FuncProvider()
-        => Dispose();
+    {
+        Dispose();
+    }
 }

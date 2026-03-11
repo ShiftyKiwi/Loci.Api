@@ -31,13 +31,13 @@
 
     <!-- Force include the Readme because nuget is grumpy. -->
     <ItemGroup>
-        <None Include="README.md" Pack="true" PackagePath="" />
+        <None Include="README.md" Pack="true" PackagePath=""/>
     </ItemGroup>
 
     <!--Make sure the source generator is not building twice.-->
     <ItemGroup>
-        <Compile Remove="LociAPIGenerator\**" />
-        <EmbeddedResource Remove="LociAPIGenerator\**" />
+        <Compile Remove="LociAPIGenerator\**"/>
+        <EmbeddedResource Remove="LociAPIGenerator\**"/>
         <!--<ProjectReference Include="LociAPIGenerator\LociAPIGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />-->
     </ItemGroup>
 

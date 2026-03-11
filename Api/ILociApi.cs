@@ -1,14 +1,12 @@
 namespace LociApi.Api;
 
-/// <summary>
-///   The full API available for Loci.
-/// </summary>
+/// <summary> The full API available for Loci. </summary>
 public interface ILociApi : ILociApiBase
 {
-    /// <inheritdoc cref="ILociApiRegistry"/>
+    /// <inheritdoc cref="ILociApiRegistry" />
     public ILociApiRegistry Registry { get; }
 
-    /// <inheritdoc cref="ILociApiStatusManager"/>
+    /// <inheritdoc cref="ILociApiStatusManager" />
     public ILociApiStatusManager StatusManager { get; }
 
     ///<inheritdoc cref="ILociApiStatuses" />

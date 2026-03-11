@@ -4,21 +4,13 @@ using Dalamud.Plugin.Ipc.Exceptions;
 
 namespace LociApi.Helpers;
 
-/// <summary>
-///   Specialized subscriber only allowing to invoke functions with a return.
-/// </summary>
+/// <summary> Specialized subscriber only allowing to invoke functions with a return. </summary>
 public class FuncSubscriber<TRet>
 {
-    private readonly string                     _label;
+    private readonly string _label;
     private readonly ICallGateSubscriber<TRet>? _subscriber;
 
-    /// <summary>
-    ///   Whether the subscriber could successfully be created.
-    /// </summary>
-    public bool Valid
-        => _subscriber != null;
-
-    /// <inheritdoc cref="FuncSubscriber{TRet}"/>
+    /// <inheritdoc cref="FuncSubscriber{TRet}" />
     protected FuncSubscriber(IDalamudPluginInterface pi, string label)
     {
         _label = label;
@@ -33,24 +25,24 @@ public class FuncSubscriber<TRet>
         }
     }
 
-    /// <summary>
-    ///   Invoke the function. See the source of the subscriber for details.
-    /// </summary>
-    protected TRet Invoke()
-        => _subscriber != null ? _subscriber.InvokeFunc() : throw new IpcNotReadyError(_label);
-}
-
-/// <inheritdoc cref="FuncSubscriber{TRet}"/>
-public class FuncSubscriber<T1, TRet>
-{
-    private readonly string                         _label;
-    private readonly ICallGateSubscriber<T1, TRet>? _subscriber;
-
-    /// <inheritdoc cref="FuncSubscriber{TRet}.Valid"/>
+    /// <summary> Whether the subscriber could successfully be created. </summary>
     public bool Valid
         => _subscriber != null;
 
-    /// <inheritdoc cref="FuncSubscriber{TRet}"/>
+    /// <summary> Invoke the function. See the source of the subscriber for details. </summary>
+    protected TRet Invoke()
+    {
+        return _subscriber != null ? _subscriber.InvokeFunc() : throw new IpcNotReadyError(_label);
+    }
+}
+
+/// <inheritdoc cref="FuncSubscriber{TRet}" />
+public class FuncSubscriber<T1, TRet>
+{
+    private readonly string _label;
+    private readonly ICallGateSubscriber<T1, TRet>? _subscriber;
+
+    /// <inheritdoc cref="FuncSubscriber{TRet}" />
     protected FuncSubscriber(IDalamudPluginInterface pi, string label)
     {
         _label = label;
@@ -65,22 +57,24 @@ public class FuncSubscriber<T1, TRet>
         }
     }
 
-    /// <inheritdoc cref="FuncSubscriber{TRet}.Invoke"/>
-    protected TRet Invoke(T1 a)
-        => _subscriber != null ? _subscriber.InvokeFunc(a) : throw new IpcNotReadyError(_label);
-}
-
-/// <inheritdoc cref="FuncSubscriber{TRet}"/>
-public class FuncSubscriber<T1, T2, TRet>
-{
-    private readonly string                             _label;
-    private readonly ICallGateSubscriber<T1, T2, TRet>? _subscriber;
-
-    /// <inheritdoc cref="FuncSubscriber{TRet}.Valid"/>
+    /// <inheritdoc cref="FuncSubscriber{TRet}.Valid" />
     public bool Valid
         => _subscriber != null;
 
-    /// <inheritdoc cref="FuncSubscriber{TRet}"/>
+    /// <inheritdoc cref="FuncSubscriber{TRet}.Invoke" />
+    protected TRet Invoke(T1 a)
+    {
+        return _subscriber != null ? _subscriber.InvokeFunc(a) : throw new IpcNotReadyError(_label);
+    }
+}
+
+/// <inheritdoc cref="FuncSubscriber{TRet}" />
+public class FuncSubscriber<T1, T2, TRet>
+{
+    private readonly string _label;
+    private readonly ICallGateSubscriber<T1, T2, TRet>? _subscriber;
+
+    /// <inheritdoc cref="FuncSubscriber{TRet}" />
     protected FuncSubscriber(IDalamudPluginInterface pi, string label)
     {
         _label = label;
@@ -95,22 +89,24 @@ public class FuncSubscriber<T1, T2, TRet>
         }
     }
 
-    /// <inheritdoc cref="FuncSubscriber{TRet}.Invoke"/>
-    protected TRet Invoke(T1 a, T2 b)
-        => _subscriber != null ? _subscriber.InvokeFunc(a, b) : throw new IpcNotReadyError(_label);
-}
-
-/// <inheritdoc cref="FuncSubscriber{TRet}"/>
-public class FuncSubscriber<T1, T2, T3, TRet>
-{
-    private readonly string                                 _label;
-    private readonly ICallGateSubscriber<T1, T2, T3, TRet>? _subscriber;
-
-    /// <inheritdoc cref="FuncSubscriber{TRet}.Valid"/>
+    /// <inheritdoc cref="FuncSubscriber{TRet}.Valid" />
     public bool Valid
         => _subscriber != null;
 
-    /// <inheritdoc cref="FuncSubscriber{TRet}"/>
+    /// <inheritdoc cref="FuncSubscriber{TRet}.Invoke" />
+    protected TRet Invoke(T1 a, T2 b)
+    {
+        return _subscriber != null ? _subscriber.InvokeFunc(a, b) : throw new IpcNotReadyError(_label);
+    }
+}
+
+/// <inheritdoc cref="FuncSubscriber{TRet}" />
+public class FuncSubscriber<T1, T2, T3, TRet>
+{
+    private readonly string _label;
+    private readonly ICallGateSubscriber<T1, T2, T3, TRet>? _subscriber;
+
+    /// <inheritdoc cref="FuncSubscriber{TRet}" />
     protected FuncSubscriber(IDalamudPluginInterface pi, string label)
     {
         _label = label;
@@ -125,7 +121,13 @@ public class FuncSubscriber<T1, T2, T3, TRet>
         }
     }
 
-    /// <inheritdoc cref="FuncSubscriber{TRet}.Invoke"/>
+    /// <inheritdoc cref="FuncSubscriber{TRet}.Valid" />
+    public bool Valid
+        => _subscriber != null;
+
+    /// <inheritdoc cref="FuncSubscriber{TRet}.Invoke" />
     protected TRet Invoke(T1 a, T2 b, T3 c)
-        => _subscriber != null ? _subscriber.InvokeFunc(a, b, c) : throw new IpcNotReadyError(_label);
+    {
+        return _subscriber != null ? _subscriber.InvokeFunc(a, b, c) : throw new IpcNotReadyError(_label);
+    }
 }
